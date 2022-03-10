@@ -44,6 +44,7 @@ def breadthFirstSearch(problem):
     return a path to the goal
     '''
     # TODO 18
+
     startingNode = problem.getStartState()
     if problem.isGoalState(startingNode):
         return []
@@ -57,11 +58,12 @@ def breadthFirstSearch(problem):
         currentNode, actions = myQueue.pop()
         if currentNode not in visitedNodes:
             visitedNodes.append(currentNode)
+            successors = problem.getSuccessors(currentNode)
 
             if problem.isGoalState(currentNode):
                 return actions
 
-            for nextNode, action, cost in problem.getSuccessors(currentNode):
+            for nextNode, action, cost in successors:
                 newAction = actions + [action]
                 myQueue.push((nextNode, newAction))
 
@@ -112,6 +114,21 @@ def singleFoodSearchHeuristic(state, problem=None):
     A heuristic function for the problem of single food search
     """
     # TODO 20
+    position, foodGrid = state
+    return len(foodGrid.asList())  # Gets 2/4 on autograder but expands 12517 nodes in ~9"
+
+    # 0/4 on autograder but expands 6126 nodes in ~3"
+    foodToEat = foodGrid.asList()
+    totalCost = 0
+    curPoint = position
+    while foodToEat:
+        heuristic_cost, food = \
+            min([(util.manhattanDistance(curPoint, food), food) for food in foodToEat])
+        foodToEat.remove(food)
+        curPoint = food
+        totalCost += heuristic_cost
+
+    return totalCost
     pass
 
 
@@ -120,6 +137,15 @@ def multiFoodSearchHeuristic(state, problem=None):
     A heuristic function for the problem of multi-food search
     """
     # TODO 21
+    # position = state[0]
+    # foodPos = []
+    # for i in range(len(state) - 1):
+    #     foodPos.append(state[i + 1])
+    # totalH = 0
+    # for food in foodPos:
+    #     totalH += ((position[0] - food[0]) ** 2 + (position[1] - food[1]) ** 2) ** 0.5
+    # return totalH
+    print("MultipleFood")
     pass
 
 
