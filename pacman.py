@@ -169,6 +169,20 @@ class GameState:
     def getNumFood(self):
         return self.data.food.count()
 
+    # function get Food Position for singleFoodSearchProblem
+    def getFoodPosition(self):
+        if (self.getNumFood() == 0):
+            return self.getPacmanPosition()
+        else:
+            w = 0
+            while w < self.getFood().width:
+                h = 0
+                while h < self.getFood().height:
+                    if (self.getFood()[w][h] == True):
+                        return (w, h)
+                    h += 1
+                w += 1
+
     def getFood(self):
         """
         Returns a Grid of boolean food indicator variables.

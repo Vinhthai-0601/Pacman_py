@@ -83,8 +83,7 @@ class UCSFoodSearchAgent(SearchAgent):
 class AStarFoodSearchAgent(SearchAgent):
     # TODO 16
     def __init__(self):
-        self.Single = True
         self.searchProblem = problems.SingleFoodSearchProblem
-        # self.searchProblem = problems.MultiFoodSearchProblem
+        #self.searchProblem = problems.MultiFoodSearchProblem
         self.searchAlgorithm = search.aStarSearch
     pass

@@ -54,21 +54,7 @@ class SingleFoodSearchProblem(SearchProblem):
         self.walls = startingGameState.getWalls()
         if start is not None:
             self.startState = start
-        print('PACMAN POSITION:', self.startState)
-        print('Staring', startingGameState.getFood()[11][9])
-        if (startingGameState.getNumFood() == 0):
-            self.goal = self.startState
-        else:
-            w = 0
-            while w < startingGameState.getFood().width:
-                h = 0
-                while h < startingGameState.getFood().height:
-                    if (startingGameState.getFood()[w][h] == True):
-                        self.goal = (w, h)
-                        print(self.goal)
-                    h += 1
-                w += 1
-        pass
+        self.goal = startingGameState.getFoodPosition()
 
     def getStartState(self):
         # TODO 2
