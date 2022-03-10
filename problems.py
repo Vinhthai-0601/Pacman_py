@@ -1,4 +1,7 @@
 import util
+import pacman
+from game import Actions
+from game import Directions
 
 
 class SearchProblem:
@@ -45,46 +48,64 @@ class SearchProblem:
 
 
 class SingleFoodSearchProblem(SearchProblem):
-    def __init__(self, startingGameState):
+    def __init__(self, startingGameState, start=None):
         # TODO 1
-        self.start = (startingGameState.getPacmanPosition(), startingGameState.getFood())
+        self.startState = startingGameState.getPacmanPosition()
         self.walls = startingGameState.getWalls()
-        self.startingGameState = startingGameState
-        self._expanded = 0  # DO NOT CHANGE
-        self.heuristicInfo = {}  # A dictionary for the heuristic to store information
+        if start is not None:
+            self.startState = start
+        print('PACMAN POSITION:', self.startState)
+        print('Staring', startingGameState.getFood()[11][9])
+        if (startingGameState.getNumFood() == 0):
+            self.goal = self.startState
+        else:
+            w = 0
+            while w < startingGameState.getFood().width:
+                h = 0
+                while h < startingGameState.getFood().height:
+                    if (startingGameState.getFood()[w][h] == True):
+                        self.goal = (w, h)
+                        print(self.goal)
+                    h += 1
+                w += 1
         pass
 
     def getStartState(self):
         # TODO 2
-        return self.start
+        return self.startState
         pass
 
     def isGoalState(self, state):
         # TODO 3
-        goalstate = state
-        if self.state == goalstate:
-            return True
-        else:
-            return False
+        return state == self.goal
         pass
 
     def getSuccessors(self, state):
         # TODO 4
-        successor = self.state
-        action = self.state
-        stepCost = self.state
-        list = [[successor,
-        action, stepCost]]
-        return list
+        successors = []
+        # self._expanded += 1  # DO NOT CHANGE
+        for direction in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
+            x, y = state
+            dx, dy = Actions.directionToVector(direction)
+            nextx, nexty = int(x + dx), int(y + dy)
+            if not self.walls[nextx][nexty]:
+                successors.append(((nextx, nexty), direction, 1))
+        return successors
         pass
 
     def getCostOfActions(self, actions):
         # TODO 5
+        if actions is None:
+            # no actions
+            return -1
+
+        x, y = self.getStartState()
         cost = 0
-        actions = []
-        for i in len(actions):
+        for action in actions:
+            # figure out the next state and see whether it's legal
+            dx, dy = Actions.directionToVector(action)
+            x, y = int(x + dx), int(y + dy)
             cost += 1
-            i += 1
         return cost
         pass
 
@@ -92,20 +113,50 @@ class SingleFoodSearchProblem(SearchProblem):
 class MultiFoodSearchProblem(SearchProblem):
     def __init__(self, startingGameState):
         # TODO 6
+        pacmanPos, dotGrid = startingGameState.getPacmanPosition(), startingGameState.getFood()
+        self.startState = (pacmanPos, dotGrid)
+        self.walls = startingGameState.getWalls()
+        self.startingGameState = startingGameState
+        self.expanded = 0
+        # Store information about heuristic
+        self.heuristicInfo = {}
         pass
 
     def getStartState(self):
         # TODO 7
+        return self.startState
         pass
 
     def isGoalState(self, state):
         # TODO 8
+        return state[1].count() == 0
         pass
 
     def getSuccessors(self, state):
         # TODO 9
+        successors = []
+        self.expanded += 1  # DO NOT CHANGE
+        for direction in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
+            x, y = state[0]
+            dx, dy = Actions.directionToVector(direction)
+            nextx, nexty = int(x + dx), int(y + dy)
+            if not self.walls[nextx][nexty]:
+                nextFood = state[1].copy()
+                nextFood[nextx][nexty] = False
+                successors.append((((nextx, nexty), nextFood), direction, 1))
+        return successors
         pass
 
     def getCostOfActions(self, actions):
         # TODO 10
+        x, y = self.getStartState()[0]
+        cost = 0
+        for action in actions:
+            # figure out the next state and see whether it's legal
+            dx, dy = Actions.directionToVector(action)
+            x, y = int(x + dx), int(y + dy)
+            if self.walls[x][y]:
+                return 999999
+            cost += 1
+        return cost
         pass
