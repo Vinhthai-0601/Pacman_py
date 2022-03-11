@@ -35,8 +35,7 @@ class SearchAgent(Agent):
         self.agentActionIndex = -1
         problem = self.searchProblem(state)
         self.agentActions = self.searchAlgorithm(problem)
-        # self.agentActions = self.searchAlgorithm(problem)
-        print(f"Total steps of Pacman took: {problem.getCostOfActions(self.agentActions)}")
+        print(f"Total steps : {problem.getCostOfActions(self.agentActions)}")
 
     def getAction(self, state):
         """
@@ -57,8 +56,8 @@ class SearchAgent(Agent):
 class BFSFoodSearchAgent(SearchAgent):
     # TODO 13
     def __init__(self):
-        self.searchProblem = problems.SingleFoodSearchProblem
-        # self.searchProblem = problems.MultiFoodSearchProblem
+        # self.searchProblem = problems.SingleFoodSearchProblem
+        self.searchProblem = problems.MultiFoodSearchProblem
         self.searchAlgorithm = search.breadthFirstSearch
 
 

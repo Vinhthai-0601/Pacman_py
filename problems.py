@@ -54,7 +54,17 @@ class SingleFoodSearchProblem(SearchProblem):
         self.walls = startingGameState.getWalls()
         if start is not None:
             self.startState = start
-        self.goal = startingGameState.getFoodPosition()
+        if (startingGameState.getNumFood() == 0):
+            self.goal = self.startState
+        else:
+            w = 0
+            while w < startingGameState.getFood().width:
+                h = 0
+                while h < startingGameState.getFood().height:
+                    if (startingGameState.getFood()[w][h] == True):
+                        self.goal = (w, h)
+                    h += 1
+                w += 1
 
     def getStartState(self):
         # TODO 2
@@ -69,7 +79,6 @@ class SingleFoodSearchProblem(SearchProblem):
     def getSuccessors(self, state):
         # TODO 4
         successors = []
-        # self._expanded += 1  # DO NOT CHANGE
         for direction in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             x, y = state
             dx, dy = Actions.directionToVector(direction)
@@ -82,13 +91,11 @@ class SingleFoodSearchProblem(SearchProblem):
     def getCostOfActions(self, actions):
         # TODO 5
         if actions is None:
-            # no actions
             return -1
 
         x, y = self.getStartState()
         cost = 0
         for action in actions:
-            # figure out the next state and see whether it's legal
             dx, dy = Actions.directionToVector(action)
             x, y = int(x + dx), int(y + dy)
             cost += 1
@@ -103,8 +110,6 @@ class MultiFoodSearchProblem(SearchProblem):
         self.startState = (pacmanPos, dotGrid)
         self.walls = startingGameState.getWalls()
         self.startingGameState = startingGameState
-        self.expanded = 0
-        # Store information about heuristic
         self.heuristicInfo = {}
         pass
 
@@ -121,7 +126,6 @@ class MultiFoodSearchProblem(SearchProblem):
     def getSuccessors(self, state):
         # TODO 9
         successors = []
-        self.expanded += 1  # DO NOT CHANGE
         for direction in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             x, y = state[0]
             dx, dy = Actions.directionToVector(direction)
@@ -138,7 +142,6 @@ class MultiFoodSearchProblem(SearchProblem):
         x, y = self.getStartState()[0]
         cost = 0
         for action in actions:
-            # figure out the next state and see whether it's legal
             dx, dy = Actions.directionToVector(action)
             x, y = int(x + dx), int(y + dy)
             if self.walls[x][y]:

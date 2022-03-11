@@ -6,3 +6,4 @@ Working files:
     search.py          : depthFirstSearch, breadthFirstSearch, uniformCostSearch, aStarSearch,
                          singleFoodSearchHeuristic, multiFoodSearchHeuristic
     util.py            : Stack, Queue, PriorityQueue
+
